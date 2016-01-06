@@ -1,0 +1,20 @@
+{
+  "name": "matchup",
+  "version": "1.0.0",
+  "description": "Tournament bracket site and review of MEAN",
+  "main": "server/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "David Reeve <david.thomas.reeve@gmail.com> (http://lancey.space)",
+  "license": "MIT",
+  "dependencies": {
+    "angular": "^1.4.8",
+    "angular-ui-router": "^0.2.15",
+    "body-parser": "^1.14.2",
+    "bootstrap": "^3.3.6",
+    "chalk": "^1.1.1",
+    "express": "^4.13.3",
+    "mongoose": "^4.3.4"
+  }
+}
