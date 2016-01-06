@@ -1,6 +1,6 @@
 node_modules/
 public_modules/
 
-server/env/
+server/env/*.js
 !server/env/index.js
 !server/env/dev.js.template

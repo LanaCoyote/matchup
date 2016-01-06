@@ -1,0 +1,5 @@
+module.exports = {
+
+  "DATABASE_URI" : "mongodb://[[ ENTER YOUR URI HERE ]]", // URI of the mongo database to use
+
+}
