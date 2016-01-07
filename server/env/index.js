@@ -1,3 +1,4 @@
+var chalk = require( 'chalk' );
 var path = require( 'path' );   // node path module (for filepath parsing)
 
 function EnvConfig( env, cfg ) {
@@ -13,4 +14,8 @@ function EnvConfig( env, cfg ) {
 var envToLoad = process.env.MATCHUP_ENV || 'dev';
 var cfgPath = path.join( __dirname, './' + envToLoad + '.js' );
 
-module.exports = EnvConfig( envToLoad, require( cfgPath ) );
+console.log( "[ENV]", "Now loading environment settings for", envToLoad, ". . ." );
+
+module.exports = new EnvConfig( envToLoad, require( cfgPath ) );
+
+console.log( "[ENV]", chalk.green( "Environment settings loaded successfully!" ) );
