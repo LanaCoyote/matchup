@@ -20,7 +20,7 @@ BracketSchema.virtual( 'completedMatches' ).get( function() {
 
 });
 
-BracketSchema.statics.createBracketFromPlayerList = function( playerArray, ladder ) {
+BracketSchema.statics.fromPlayerList = function( playerArray, ladder ) {
 
   // check that the player list is valid
   if ( !Array.isArray( playerArray ) ) {
@@ -112,7 +112,7 @@ BracketSchema.statics.createBracketFromPlayerList = function( playerArray, ladde
 
 }
 
-BracketSchema.statics.createBracketFromCompletedBracket = function( completedBracket ) {
+BracketSchema.statics.fromCompletedBracket = function( completedBracket ) {
 
   if ( !completedBracket.isComplete() ) {
     return console.error( "[DB/BRACKET]", chalk.red( "Attempted to create a new bracket from a non-complete bracket" ) );

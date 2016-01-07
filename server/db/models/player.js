@@ -5,6 +5,7 @@ var PlayerSchema = new mongoose.Schema({
 
   name: { type: String, required: true, time: true },
   seed: { type: Number, required: true },
+  ladder: { type: mongoose.Schema.Types.ObjectId, ref: 'Ladder' },
 
 });
 

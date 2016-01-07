@@ -36,7 +36,7 @@ function createBracketFromPlayerListTest() {
 
     console.log( "Creating a new bracket from player list . . ." );
 
-    return mongoose.model( 'Bracket' ).createBracketFromPlayerList( players )
+    return mongoose.model( 'Bracket' ).fromPlayerList( players )
     .then( function( bracket ) {
 
       console.log( "Created the following bracket:", JSON.stringify( bracket ) );
@@ -82,7 +82,7 @@ function createBracketFromPreviousBracketTest( prevBracketId ) {
   return mongoose.model( 'Bracket' ).findById( prevBracketId ).populate( 'matches' ).exec()
   .then( function( prevBracket ) {
 
-    mongoose.model( 'Bracket' ).createBracketFromCompletedBracket( prevBracket )
+    mongoose.model( 'Bracket' ).fromCompletedBracket( prevBracket )
     .then( function( bracket ) {
 
       bracket.matches.forEach( function( matchId ) {
