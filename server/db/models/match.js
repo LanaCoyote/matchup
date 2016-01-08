@@ -71,7 +71,7 @@ MatchSchema.methods.setWinner = function( player ) {
   if ( this.bracket.matchFinished ) {
     matchEnd = this.bracket.matchFinished( this, this.result );
   } else {
-    matchEnd = mongoose.model( 'Bracket' ).findById( this.bracket ).exec()
+    matchEnd = mongoose.model( 'Bracket' ).findById( this.bracket ).populate( 'matches' ).exec()
     .then( function( bracket ) {
       return bracket.matchFinished( match, match.result );
     } ).then( null, function( err ) {
@@ -80,7 +80,7 @@ MatchSchema.methods.setWinner = function( player ) {
   }
 
   // save the match
-  return matchEnd.then( function() { match.save() } );
+  return matchEnd.then( function() { return match.save() } );
 
 }
 

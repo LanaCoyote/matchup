@@ -6,6 +6,7 @@ var BracketSchema = new mongoose.Schema({
   // completedMatches : { type: Number, required: true, default: 0 },
   ladder : { type: mongoose.Schema.Types.ObjectId, ref: 'Ladder' },
   matches : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Match' }],
+  matchesComplete : { type: Number, default: 0 }
 
 });
 
@@ -66,7 +67,7 @@ BracketSchema.statics.fromPlayerList = function( playerArray, ladder ) {
         }
 
         // increment the completed matches on the bracket
-        // bracket.completedMatches += 1;
+        bracket.matchesComplete += 1;
 
       } else {
 
@@ -142,7 +143,7 @@ BracketSchema.statics.fromCompletedBracket = function( completedBracket ) {
 
         }
 
-        bracket.completedMatches += 1;
+        bracket.matchesComplete += 1;
 
       } else {
 
@@ -187,7 +188,7 @@ BracketSchema.statics.fromCompletedBracket = function( completedBracket ) {
 
 BracketSchema.methods.isComplete = function() {
 
-  return this.completedMatches === this.matches.length;
+  return this.matchesComplete === this.matches.length;
 
 }
 
@@ -195,7 +196,26 @@ BracketSchema.methods.matchFinished = function( match, result ) {
 
   // this.completedMatches += 1;
   // console.log( this.completedMatches );
-  // return this.save();
+  this.matchesComplete += 1;
+
+  if ( this.isComplete() ) {
+
+    if ( this.ladder.nextBracket ) {
+      this.ladder.nextBracket();
+    } else {
+
+      mongoose.model( 'Ladder' ).findById( this.ladder ).exec()
+      .then( function( ladder ) {
+        ladder.nextBracket();
+      }).then( null, function( err ) {
+        console.error( "[DB/BRACKET]", chalk.red( "An error occurred attempting to signal that the bracket is complete:"), err );
+      });
+
+    }
+
+  }
+
+  return this.save();
 
 }
 

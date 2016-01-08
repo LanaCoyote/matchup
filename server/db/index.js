@@ -13,7 +13,7 @@ var db        = mongoose.connect( db_uri ).connection;
 // load modules into application
 require( './models' );
 
-debugOut( "Opening MongoDB connection at", db_uri, chalk.yellow( ". . ." ) );
+debugOut( "Opening MongoDB connection at", db_uri, ". . ." );
 module.exports = new Promise( function( resolve, reject ) {
 
   db.on( 'error', reject );
