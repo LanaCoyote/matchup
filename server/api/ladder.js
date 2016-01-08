@@ -1,3 +1,4 @@
+var chalk = require( 'chalk' );
 var mongoose = require( 'mongoose' );
 var router = require( 'express' ).Router();
 
@@ -118,11 +119,55 @@ router.post( '/', function( req, res, next ) {
 
     return mongoose.model( 'Ladder' ).fromPlayerList( players, req.body.title );
 
-  }).then( function( ladder ) {
+  }).then( function( ladderId ) {
 
-    res.status( 201 ).json( ladder );
+    res.status( 201 );
+
+    mongoose.model( 'Ladder' ).findById( ladderId ).exec()
+    .then( function( ladder ) {
+
+      res.json( ladder );
+
+    }).then( null, function( err ) {
+
+      console.error( "[API/Ladder]", chalk.red( "An error occurred retrieving a created ladder:" ), err )
+      res.json( { error: true, info: "Your ladder was created but there was an error retrieving it", _id: ladderId } );
+
+    });
 
   }).then( null, next );
+
+});
+
+// REPORT THE WINNER OF A MATCH FROM A POST REQUEST
+router.post( '/:ladderId/reportWinner', function( req, res, next ) {
+
+  // validate the request
+  if ( req.body.matchId === undefined || req.body.winner === undefined ) {
+    return next( new TypeError( "Post request invalid" ) );
+  }
+
+  mongoose.model( 'Match' ).findById( req.body.matchId ).populate( 'bracket players' ).exec()
+  .then( function( match ) {
+
+    if ( match.bracket.ladder.toString() !== req.ladder._id.toString() ) {
+      throw new Error( "Can't report the winner of a match that isn't on this ladder" );
+    } else if ( !match.isActive() ) {
+      throw new Error( "Attempted to report the winner of a completed match" );
+    }
+
+    return match.setWinner( req.body.winner );
+
+  }).then( function( match ) {
+
+    res.json( match );
+
+  }).then( null, function( err ) {
+
+    console.error( "[API/Ladder]", chalk.red( "An error occurred reporting the winner of a match" ) );
+    next( err );
+
+  });
 
 });
 

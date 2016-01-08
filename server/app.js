@@ -1,44 +1,105 @@
 var bodyParser = require( 'body-parser' );
 var chalk = require( 'chalk' );
 var express = require( 'express' );
+var path = require( 'path' );
 
-require( './db' ); // init the database
-var app = express();
+// app initialization
+function appFactory() {
 
-app.use( bodyParser.json() );
-app.use( bodyParser.urlencoded({ extended: true }));
+  require( './db' ); // init the database
+  var app = express();
 
-app.use( function( req, res, next ) {
+  // initialize all middleware
+  initBodyParsingMiddleware( app );
+  initLoggingMiddleware( app );
+  initStaticRoutingMiddleware( app );
+  initApiRoutingMiddleware( app );
+  initFrontend( app );
+  initErrorHandlingMiddleware( app );
 
-  console.log( " > ", chalk.yellow( req.method ), req.url );
-  if ( req.query ) console.log( " >", chalk.blue( "QUERY" ), req.query );
-  if ( req.body ) console.log( " >", chalk.blue( "BODY" ), req.body );
+  return app;
 
-  res.on( 'finish', function() {
+}
 
-    var coloring = chalk.blue;
-    if ( res.statusCode - 200 < 100 ) coloring = chalk.green;
-    else if ( res.statusCode - 400 < 100 ) coloring = chalk.yellow;
-    else if ( res.statusCode - 500 < 100 ) coloring = chalk.red;
+// parsing middleware
+function initBodyParsingMiddleware( app ) {
 
-    console.log( " < ", coloring( res.statusCode ), res.statusMessage );
+  app.use( bodyParser.json() );
+  app.use( bodyParser.urlencoded({ extended: true }));
+
+}
+
+// logging middleware
+function initLoggingMiddleware( app ) {
+
+  app.use( function( req, res, next ) {
+
+    console.log( " > ", chalk.yellow( req.method ), req.url );
+    if ( req.query ) console.log( " >", chalk.blue( "QUERY" ), req.query );
+    if ( req.body ) console.log( " >", chalk.blue( "BODY" ), req.body );
+
+    res.on( 'finish', function() {
+
+      var coloring = chalk.blue;
+      if ( res.statusCode - 200 < 100 ) coloring = chalk.green;
+      else if ( res.statusCode - 400 < 100 ) coloring = chalk.yellow;
+      else if ( res.statusCode - 500 < 100 ) coloring = chalk.red;
+
+      console.log( " < ", coloring( res.statusCode ), res.statusMessage );
+
+    });
+
+    next();
 
   });
 
-  next();
+}
 
-});
+// static routing
+function initStaticRoutingMiddleware( app ) {
 
-app.use( '/api/', require( './api' ) );
+  var staticRoutes = [
+    path.join( __dirname, "../public" ),
+    path.join( __dirname, "../public_modules" )
+  ]
 
-app.use( function( err, req, res, next ) {
+  staticRoutes.forEach( function( staticRoute ) {
 
-  console.log( "[APP]", chalk.magenta( err ) );
-  res.status( err.status || 500 ).end();
+    app.use( express.static( staticRoute ) );
 
-});
+  });
 
-app.listen( 8000, function() {
+}
+
+// api routing
+function initApiRoutingMiddleware( app ) {
+
+  app.use( '/api/', require( './api' ) );
+
+}
+
+function initFrontend( app ) {
+
+  app.get( '/*', function( req, res, next ) {
+    res.sendFile( path.join( __dirname, '../public/index.html' ) );
+  });
+
+}
+
+// error handling
+function initErrorHandlingMiddleware( app ) {
+
+  app.use( function( err, req, res, next ) {
+
+    console.log( "[APP]", chalk.magenta( err ) );
+    res.status( err.status || 500 ).end();
+
+  });
+
+}
+
+// start the server
+appFactory().listen( 8000, function() {
 
   console.log( "[APP]", chalk.green( "Server started on port 8000" ) );
 
