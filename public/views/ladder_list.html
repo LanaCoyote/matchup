@@ -1,0 +1,8 @@
+<div class="container">
+  <h2>Open Ladders</h2>
+  <ul id="ladder-list">
+    <li class="ladder-link" ng-repeat="ladder in ladders"><a ui-sref="ladderDetail({ ladderId: ladder._id })">{{ ladder.title }}</a></li>
+  </ul>
+
+  <button class="btn btn-success" ui-sref="ladderCreate">Create Ladder</button>
+</div>

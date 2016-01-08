@@ -1,0 +1,8 @@
+<div>
+  <h2>{{ ladder.title }}</h2>
+  <div class="row" ng-repeat="bracket in ladder.brackets">
+    <div class="col-xs-{{ 12/bracket.length }}" ng-repeat="match in bracket">
+      <match-info match="match" ladder-id="ladder._id"></match-info>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+
+/* Content Block */
+#content {
+
+  /* Natural padding */
+  padding: 1em;
+
+  /* Adjust spacing for the navbar */
+  margin-top: 4em;
+
+}
+
+.match-info {
+
+  text-align: center;
+
+  height: 95px;
+
+}
+
+.match-info .winner {
+
+  background-color: #A1D490;
+
+}
+
+label {
+
+  vertical-align: middle;
+
+}
+
+button {
+
+  margin: 1em;
+
+}
+
+/* Footer Styling */
+footer {
+
+  text-align: center;
+
+}

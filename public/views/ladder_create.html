@@ -1,0 +1,34 @@
+<div class="container">
+  <h2>Create Ladder</h2>
+  <div id="create-ladder-form">
+    <form name="ladderForm" novalidate>
+      <div class="form-group">
+        <label for="title" class="col-xs-1 control-label">Title</label>
+        <div class="col-xs-11">
+          <input class="form-control" name="title" type="text" ng-model="newLadder.title" required>
+        </div>
+      </div>
+
+      <label class="control-label">Players</label>
+      <div>
+        <div class="form-group" ng-repeat="player in newLadder.playerList">
+          <label for="name" class="col-xs-1 control-label">Name</label>
+          <div class="col-xs-7">
+            <input class="form-control" type="text" ng-model="player.name" required>
+          </div>
+
+          <label for="seed" class="col-xs-1 control-label">Seed</label>
+          <div class="col-xs-3">
+            <input class="form-control" type="text" ng-model="player.seed" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group text-center">
+        <button class="btn btn-success" ng-click="addPlayer()">+ Add Player</button>
+
+        <button type="submit" class="btn btn-success" ng-click="createLadder()">Create Ladder</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<div class="panel panel-default match-info">
+  <div class="panel-body">
+    <div class="player-name" ng-class="{winner: match.result === 1}">
+      <a href="#" ng-click="reportWinner(1)">{{ match.players[0].name }} ({{ match.players[0].seed }})</a>
+    </div>
+    <div ng-show="match.players.length > 1">vs.</div>
+    <div class="player-name" ng-show="match.players.length > 1" ng-class="{winner: match.result === 2}">
+      <a href="#" ng-click="reportWinner(2)">{{ match.players[1].name }} ({{ match.players[1].seed }})</a>
+    </div>
+  </div>
+</div>
